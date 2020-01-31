@@ -26,7 +26,7 @@ import {
   LineageResource,
 } from '@kubeflow/frontend';
 import * as React from 'react';
-import { Page } from './Page';
+import { Page, PageProps } from './Page';
 import { ToolbarProps } from '../components/Toolbar';
 import { RoutePage, RoutePageFactory, RouteParams } from '../components/Router';
 import { classes } from 'typestyle';
@@ -93,6 +93,18 @@ export default class ArtifactDetails extends Page<{}, ArtifactDetailsState> {
 
   public async componentDidMount(): Promise<void> {
     return this.load();
+  }
+
+  componentDidUpdate(prevProps: Readonly<PageProps>, prevState: Readonly<ArtifactDetailsState>, snapshot?: any): void {
+    if (this.props.match.params[RouteParams.ID] === prevProps.match.params[RouteParams.ID]) {
+      return;
+    }
+
+    this.setState({
+      artifact: undefined,
+      selectedTab: ArtifactDetailsTab.OVERVIEW,
+    });
+    this.load();
   }
 
   public render(): JSX.Element {
